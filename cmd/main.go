@@ -6,14 +6,18 @@ import (
 	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 	"github.com/tabo-syu/parl/internal"
 	"github.com/tabo-syu/parl/internal/commands"
 )
 
-const DISCORD_TOKEN = ""
-
 func main() {
-	discord, err := discordgo.New("Bot " + DISCORD_TOKEN)
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	discord, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
 	if err != nil {
 		log.Fatalf("invalid discord token: %s", err)
 	}
