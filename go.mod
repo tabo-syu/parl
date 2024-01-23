@@ -4,6 +4,7 @@ go 1.21.6
 
 require (
 	github.com/bwmarrin/discordgo v0.27.1
+	github.com/gorcon/rcon v1.3.4
 	github.com/joho/godotenv v1.5.1
 )
 

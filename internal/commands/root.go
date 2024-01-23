@@ -31,7 +31,9 @@ func (p *Parl) Handle(request *discordgo.ApplicationCommandInteractionData) stri
 	}
 
 	subCmd := request.Options[0]
-	response := ""
+	var (
+		response string
+	)
 	switch subCmd.Name {
 	case statusCmd.Name:
 		response = status()
