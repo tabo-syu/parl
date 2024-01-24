@@ -8,6 +8,6 @@ var stopCmd = &discordgo.ApplicationCommandOption{
 	Description: "Palworld ゲームサーバーを停止します。",
 }
 
-func stop() string {
-	return "stop"
+func stop() *discordgo.MessageEmbed {
+	return nil
 }

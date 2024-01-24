@@ -8,6 +8,6 @@ var startCmd = &discordgo.ApplicationCommandOption{
 	Description: "Palworld ゲームサーバーを起動します。",
 }
 
-func start() string {
-	return "start"
+func start() *discordgo.MessageEmbed {
+	return nil
 }

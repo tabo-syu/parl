@@ -8,6 +8,6 @@ var restartCmd = &discordgo.ApplicationCommandOption{
 	Description: "Palworld ゲームサーバーを再起動します。",
 }
 
-func restart() string {
-	return "restart"
+func restart() *discordgo.MessageEmbed {
+	return nil
 }

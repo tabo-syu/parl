@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/tabo-syu/parl/internal"
 )
 
 var (
@@ -35,27 +36,28 @@ func (p *Parl) GetCommand() *discordgo.ApplicationCommand {
 	return p.Command
 }
 
-func (p *Parl) Handle(request *discordgo.ApplicationCommandInteractionData) string {
+func (p *Parl) Handle(request *discordgo.ApplicationCommandInteractionData) *discordgo.MessageEmbed {
 	if len(request.Options) == 0 {
-		return "入力値が不正です！"
+		return &discordgo.MessageEmbed{
+			Color: internal.Color("ff0000"),
+			Title: "ゲームサーバーは停止しています...",
+		}
 	}
 
 	subCmd := request.Options[0]
-	var (
-		response string
-	)
 	switch subCmd.Name {
 	case statusCmd.Name:
-		response = status()
+		return status()
 	case startCmd.Name:
-		response = start()
+		return start()
 	case stopCmd.Name:
-		response = stop()
+		return stop()
 	case restartCmd.Name:
-		response = restart()
+		return restart()
 	default:
-		response = "入力値が不正です！"
+		return &discordgo.MessageEmbed{
+			Color: internal.Color("ff0000"),
+			Title: "ゲームサーバーは停止しています...",
+		}
 	}
-
-	return response
 }

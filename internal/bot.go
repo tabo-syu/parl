@@ -39,7 +39,7 @@ func (b *Bot) Start() error {
 		d.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
 			Data: &discordgo.InteractionResponseData{
-				Content: response,
+				Embeds: []*discordgo.MessageEmbed{response},
 			},
 		})
 	})
