@@ -3,7 +3,6 @@ package commands
 import (
 	"fmt"
 	"log"
-	"os"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/gorcon/rcon"
@@ -16,14 +15,10 @@ var statusCmd = &discordgo.ApplicationCommandOption{
 }
 
 func status() string {
-	host := os.Getenv("RCON_HOST")
-	port := os.Getenv("RCON_PORT")
-	password := os.Getenv("RCON_PASSWORD")
-
-	endpoint := fmt.Sprintf("%s:%s", host, port)
-	conn, err := rcon.Dial(endpoint, password)
+	address := fmt.Sprintf("%s:%s", host, port)
+	conn, err := rcon.Dial(address, password)
 	if err != nil {
-		log.Println("dial: ", endpoint, err)
+		log.Println("dial: ", address, err)
 
 		return "ゲームサーバーが停止しています。"
 	}
@@ -31,7 +26,7 @@ func status() string {
 
 	response, err := conn.Execute("Info")
 	if err != nil {
-		log.Println("execute: ", endpoint, err)
+		log.Println("execute: ", address, err)
 
 		return "エラー"
 	}

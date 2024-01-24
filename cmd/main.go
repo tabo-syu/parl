@@ -1,23 +1,18 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
 	"github.com/tabo-syu/parl/internal"
 	"github.com/tabo-syu/parl/internal/commands"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	discord, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
+	discord, err := discordgo.New(fmt.Sprintf("Bot %s", os.Getenv("DISCORD_TOKEN")))
 	if err != nil {
 		log.Fatalf("invalid discord token: %s", err)
 	}

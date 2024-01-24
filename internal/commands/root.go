@@ -1,6 +1,16 @@
 package commands
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"os"
+
+	"github.com/bwmarrin/discordgo"
+)
+
+var (
+	host     = os.Getenv("RCON_HOST")
+	port     = os.Getenv("RCON_PORT")
+	password = os.Getenv("RCON_PASSWORD")
+)
 
 type Parl struct {
 	Command *discordgo.ApplicationCommand
