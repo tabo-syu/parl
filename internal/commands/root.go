@@ -11,6 +11,7 @@ var (
 	host     = os.Getenv("RCON_HOST")
 	port     = os.Getenv("RCON_PORT")
 	password = os.Getenv("RCON_PASSWORD")
+	icon     = "https://media.discordapp.net/attachments/1005244597984821251/1199746317568721006/logo.jpg"
 )
 
 type Parl struct {

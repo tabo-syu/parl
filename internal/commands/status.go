@@ -20,8 +20,8 @@ var statusErrMessage = &discordgo.MessageEmbed{
 	Color: internal.Color("ff0000"),
 	Title: "ゲームサーバーは停止しています...",
 	Footer: &discordgo.MessageEmbedFooter{
-		IconURL: "https://media.discordapp.net/attachments/1005244597984821251/1199746317568721006/logo.jpg",
-		Text:    "The server is down...",
+		IconURL: icon,
+		Text:    "Pal Server",
 	},
 }
 
@@ -46,7 +46,7 @@ func status() *discordgo.MessageEmbed {
 		Color: internal.Color("00ff00"),
 		Title: "ゲームサーバーは稼働中です！",
 		Footer: &discordgo.MessageEmbedFooter{
-			IconURL: "https://media.discordapp.net/attachments/1005244597984821251/1199746317568721006/logo.jpg",
+			IconURL: icon,
 			Text:    response,
 		},
 	}
