@@ -7,3 +7,15 @@ func Color(hex string) int {
 
 	return int(color)
 }
+
+func ColorRed() int {
+	return Color("ff0000")
+}
+
+func ColorGreen() int {
+	return Color("00ff00")
+}
+
+func ColorOrange() int {
+	return Color("ffa500")
+}

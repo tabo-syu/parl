@@ -17,7 +17,7 @@ var statusCmd = &discordgo.ApplicationCommandOption{
 }
 
 var statusErrMessage = &discordgo.MessageEmbed{
-	Color: internal.Color("ff0000"),
+	Color: internal.ColorRed(),
 	Title: "ゲームサーバーは停止しています...",
 	Footer: &discordgo.MessageEmbedFooter{
 		IconURL: icon,
@@ -27,9 +27,9 @@ var statusErrMessage = &discordgo.MessageEmbed{
 
 func status() *discordgo.MessageEmbed {
 	address := fmt.Sprintf("%s:%s", host, port)
-	conn, err := rcon.Dial(address, password, rcon.SetDeadline(1*time.Second+500*time.Millisecond))
+	conn, err := rcon.Dial(address, password, rcon.SetDeadline(500*time.Millisecond))
 	if err != nil {
-		log.Println("dial: ", address, err)
+		log.Println("dial:", address, err)
 
 		return statusErrMessage
 	}
@@ -37,13 +37,13 @@ func status() *discordgo.MessageEmbed {
 
 	response, err := conn.Execute("Info")
 	if err != nil {
-		log.Println("execute: ", address, err)
+		log.Println("execute:", address, err)
 
 		return statusErrMessage
 	}
 
 	return &discordgo.MessageEmbed{
-		Color: internal.Color("00ff00"),
+		Color: internal.ColorGreen(),
 		Title: "ゲームサーバーは稼働中です！",
 		Footer: &discordgo.MessageEmbedFooter{
 			IconURL: icon,

@@ -8,11 +8,21 @@ import (
 )
 
 var (
-	host     = os.Getenv("RCON_HOST")
-	port     = os.Getenv("RCON_PORT")
-	password = os.Getenv("RCON_PASSWORD")
-	icon     = "https://media.discordapp.net/attachments/1005244597984821251/1199746317568721006/logo.jpg"
+	host       = os.Getenv("RCON_HOST")
+	port       = os.Getenv("RCON_PORT")
+	password   = os.Getenv("RCON_PASSWORD")
+	serverPath = os.Getenv("SERVER_PATH")
+	icon       = os.Getenv("DISCORD_ICON_URL")
 )
+
+var invalidRequestErrMessage = &discordgo.MessageEmbed{
+	Color: internal.ColorRed(),
+	Title: "コマンドの入力値が不正です...",
+	Footer: &discordgo.MessageEmbedFooter{
+		IconURL: icon,
+		Text:    "Pal Server",
+	},
+}
 
 type Parl struct {
 	Command *discordgo.ApplicationCommand
@@ -27,7 +37,7 @@ func NewParl() *Parl {
 				statusCmd,
 				startCmd,
 				stopCmd,
-				restartCmd,
+				// restartCmd,
 			},
 		},
 	}
@@ -39,10 +49,7 @@ func (p *Parl) GetCommand() *discordgo.ApplicationCommand {
 
 func (p *Parl) Handle(request *discordgo.ApplicationCommandInteractionData) *discordgo.MessageEmbed {
 	if len(request.Options) == 0 {
-		return &discordgo.MessageEmbed{
-			Color: internal.Color("ff0000"),
-			Title: "ゲームサーバーは停止しています...",
-		}
+		return invalidRequestErrMessage
 	}
 
 	subCmd := request.Options[0]
@@ -53,12 +60,9 @@ func (p *Parl) Handle(request *discordgo.ApplicationCommandInteractionData) *dis
 		return start()
 	case stopCmd.Name:
 		return stop()
-	case restartCmd.Name:
-		return restart()
+	// case restartCmd.Name:
+	// 	return restart()
 	default:
-		return &discordgo.MessageEmbed{
-			Color: internal.Color("ff0000"),
-			Title: "ゲームサーバーは停止しています...",
-		}
+		return invalidRequestErrMessage
 	}
 }
