@@ -37,7 +37,6 @@ func NewParl() *Parl {
 				statusCmd,
 				startCmd,
 				stopCmd,
-				// restartCmd,
 			},
 		},
 	}
@@ -60,8 +59,6 @@ func (p *Parl) Handle(request *discordgo.ApplicationCommandInteractionData) *dis
 		return start()
 	case stopCmd.Name:
 		return stop()
-	// case restartCmd.Name:
-	// 	return restart()
 	default:
 		return invalidRequestErrMessage
 	}
