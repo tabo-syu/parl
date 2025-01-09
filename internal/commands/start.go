@@ -1,12 +1,11 @@
 package commands
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/gorcon/rcon"
 	"github.com/tabo-syu/parl/env"
 	"github.com/tabo-syu/parl/internal"
 )
@@ -35,11 +34,12 @@ var startAlreadyMessage = &discordgo.MessageEmbed{
 	},
 }
 
-func start() *discordgo.MessageEmbed {
-	address := fmt.Sprintf("%s:%s", env.Host, env.Port)
-	conn, err := rcon.Dial(address, env.Password, rcon.SetDeadline(200*time.Millisecond))
-	if err == nil {
-		conn.Close()
+func start(api *internal.API) *discordgo.MessageEmbed {
+	ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
+	defer cancel()
+
+	if _, err := api.ServerInfo(ctx); err == nil {
+		log.Printf("failed to start command already started: %s\n", err)
 
 		return startAlreadyMessage
 	}

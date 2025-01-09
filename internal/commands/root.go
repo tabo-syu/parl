@@ -17,6 +17,7 @@ var invalidRequestErrMessage = &discordgo.MessageEmbed{
 
 type Parl struct {
 	Command *discordgo.ApplicationCommand
+	API     *internal.API
 }
 
 func NewParl() *Parl {
@@ -30,6 +31,7 @@ func NewParl() *Parl {
 				stopCmd,
 			},
 		},
+		API: internal.NewAPI(env.Password),
 	}
 }
 
@@ -45,11 +47,11 @@ func (p *Parl) Handle(request *discordgo.ApplicationCommandInteractionData) *dis
 	subCmd := request.Options[0]
 	switch subCmd.Name {
 	case statusCmd.Name:
-		return status()
+		return status(p.API)
 	case startCmd.Name:
-		return start()
+		return start(p.API)
 	case stopCmd.Name:
-		return stop()
+		return stop(p.API)
 	default:
 		return invalidRequestErrMessage
 	}

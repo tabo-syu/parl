@@ -1,12 +1,12 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/gorcon/rcon"
 	"github.com/tabo-syu/parl/env"
 	"github.com/tabo-syu/parl/internal"
 )
@@ -26,34 +26,19 @@ var stopErrMessage = &discordgo.MessageEmbed{
 	},
 }
 
-func stop() *discordgo.MessageEmbed {
-	address := fmt.Sprintf("%s:%s", env.Host, env.Port)
-	conn, err := rcon.Dial(address, env.Password, rcon.SetDeadline(1*time.Second+500*time.Millisecond))
+func stop(api *internal.API) *discordgo.MessageEmbed {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	info, err := api.ServerInfo(ctx)
 	if err != nil {
-		log.Println("dial:", address, err)
+		log.Printf("failed to stop command during 1st info request: %s", err)
 
-		return stopErrMessage
-	}
-	defer conn.Close()
-
-	status, err := conn.Execute("Info")
-	if err != nil {
-		log.Println("execute:", address, err)
-
-		return stopErrMessage
+		return statusErrMessage
 	}
 
-	save, err := conn.Execute("Save")
-	if err != nil {
-		log.Println("execute:", address, err)
-
-		return stopErrMessage
-	}
-	log.Println(save)
-
-	_, err = conn.Execute("Shutdown 60 This-server-will-be-shutdown-after-a-minute.")
-	if err != nil {
-		log.Println("execute:", address, err)
+	if err = api.ShutdownServer(ctx, 1, "1分後にゲームサーバーは停止します！"); err != nil {
+		log.Printf("failed to stop command during 'shutdown server': %s", err)
 
 		return stopErrMessage
 	}
@@ -63,7 +48,7 @@ func stop() *discordgo.MessageEmbed {
 		Title: "1分後にゲームサーバーは停止します！",
 		Footer: &discordgo.MessageEmbedFooter{
 			IconURL: env.Icon,
-			Text:    status,
+			Text:    fmt.Sprintf("%s [%s] ", info.ServerName, info.Version),
 		},
 	}
 }

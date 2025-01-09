@@ -1,12 +1,12 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/gorcon/rcon"
 	"github.com/tabo-syu/parl/env"
 	"github.com/tabo-syu/parl/internal"
 )
@@ -26,19 +26,13 @@ var statusErrMessage = &discordgo.MessageEmbed{
 	},
 }
 
-func status() *discordgo.MessageEmbed {
-	address := fmt.Sprintf("%s:%s", env.Host, env.Port)
-	conn, err := rcon.Dial(address, env.Password, rcon.SetDeadline(500*time.Millisecond))
-	if err != nil {
-		log.Println("dial:", address, err)
+func status(api *internal.API) *discordgo.MessageEmbed {
+	ctx, cancel := context.WithTimeout(context.Background(), 500*time.Millisecond)
+	defer cancel()
 
-		return statusErrMessage
-	}
-	defer conn.Close()
-
-	response, err := conn.Execute("Info")
+	info, err := api.ServerInfo(ctx)
 	if err != nil {
-		log.Println("execute:", address, err)
+		log.Printf("failed to status command: %s\n", err)
 
 		return statusErrMessage
 	}
@@ -48,7 +42,7 @@ func status() *discordgo.MessageEmbed {
 		Title: "ゲームサーバーは稼働中です！",
 		Footer: &discordgo.MessageEmbedFooter{
 			IconURL: env.Icon,
-			Text:    response,
+			Text:    fmt.Sprintf("%s [%s] ", info.ServerName, info.Version),
 		},
 	}
 }
