@@ -1,25 +1,16 @@
 package commands
 
 import (
-	"os"
-
 	"github.com/bwmarrin/discordgo"
+	"github.com/tabo-syu/parl/env"
 	"github.com/tabo-syu/parl/internal"
-)
-
-var (
-	host       = os.Getenv("RCON_HOST")
-	port       = os.Getenv("RCON_PORT")
-	password   = os.Getenv("RCON_PASSWORD")
-	serverPath = os.Getenv("SERVER_PATH")
-	icon       = os.Getenv("DISCORD_ICON_URL")
 )
 
 var invalidRequestErrMessage = &discordgo.MessageEmbed{
 	Color: internal.ColorRed(),
 	Title: "コマンドの入力値が不正です...",
 	Footer: &discordgo.MessageEmbedFooter{
-		IconURL: icon,
+		IconURL: env.Icon,
 		Text:    "Pal Server",
 	},
 }

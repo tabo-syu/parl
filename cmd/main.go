@@ -7,12 +7,13 @@ import (
 	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/tabo-syu/parl/env"
 	"github.com/tabo-syu/parl/internal"
 	"github.com/tabo-syu/parl/internal/commands"
 )
 
 func main() {
-	discord, err := discordgo.New(fmt.Sprintf("Bot %s", os.Getenv("DISCORD_TOKEN")))
+	discord, err := discordgo.New(fmt.Sprintf("Bot %s", env.DiscordToken))
 	if err != nil {
 		log.Fatalf("invalid discord token: %s", err)
 	}

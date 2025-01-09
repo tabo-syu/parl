@@ -7,6 +7,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/gorcon/rcon"
+	"github.com/tabo-syu/parl/env"
 	"github.com/tabo-syu/parl/internal"
 )
 
@@ -20,7 +21,7 @@ var startErrMessage = &discordgo.MessageEmbed{
 	Color: internal.ColorRed(),
 	Title: "ゲームサーバーの起動に失敗しました...",
 	Footer: &discordgo.MessageEmbedFooter{
-		IconURL: icon,
+		IconURL: env.Icon,
 		Text:    "Pal Server",
 	},
 }
@@ -29,21 +30,21 @@ var startAlreadyMessage = &discordgo.MessageEmbed{
 	Color: internal.ColorOrange(),
 	Title: "ゲームサーバーはすでに起動しています...",
 	Footer: &discordgo.MessageEmbedFooter{
-		IconURL: icon,
+		IconURL: env.Icon,
 		Text:    "Pal Server",
 	},
 }
 
 func start() *discordgo.MessageEmbed {
-	address := fmt.Sprintf("%s:%s", host, port)
-	conn, err := rcon.Dial(address, password, rcon.SetDeadline(200*time.Millisecond))
+	address := fmt.Sprintf("%s:%s", env.Host, env.Port)
+	conn, err := rcon.Dial(address, env.Password, rcon.SetDeadline(200*time.Millisecond))
 	if err == nil {
 		conn.Close()
 
 		return startAlreadyMessage
 	}
 
-	if err := internal.Nohup("/bin/bash", serverPath); err != nil {
+	if err := internal.Nohup("/bin/bash", env.ServerPath); err != nil {
 		log.Println("nohup:", err)
 
 		return startErrMessage
@@ -53,7 +54,7 @@ func start() *discordgo.MessageEmbed {
 		Color: internal.ColorGreen(),
 		Title: "ゲームサーバーを起動しました！",
 		Footer: &discordgo.MessageEmbedFooter{
-			IconURL: icon,
+			IconURL: env.Icon,
 			Text:    "Pal Server",
 		},
 	}

@@ -7,6 +7,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/gorcon/rcon"
+	"github.com/tabo-syu/parl/env"
 	"github.com/tabo-syu/parl/internal"
 )
 
@@ -20,14 +21,14 @@ var stopErrMessage = &discordgo.MessageEmbed{
 	Color: internal.ColorRed(),
 	Title: "ゲームサーバーの停止に失敗しました...",
 	Footer: &discordgo.MessageEmbedFooter{
-		IconURL: icon,
+		IconURL: env.Icon,
 		Text:    "Pal Server",
 	},
 }
 
 func stop() *discordgo.MessageEmbed {
-	address := fmt.Sprintf("%s:%s", host, port)
-	conn, err := rcon.Dial(address, password, rcon.SetDeadline(1*time.Second+500*time.Millisecond))
+	address := fmt.Sprintf("%s:%s", env.Host, env.Port)
+	conn, err := rcon.Dial(address, env.Password, rcon.SetDeadline(1*time.Second+500*time.Millisecond))
 	if err != nil {
 		log.Println("dial:", address, err)
 
@@ -59,9 +60,9 @@ func stop() *discordgo.MessageEmbed {
 
 	return &discordgo.MessageEmbed{
 		Color: internal.ColorOrange(),
-		Title: "3分後にゲームサーバーは停止します！",
+		Title: "1分後にゲームサーバーは停止します！",
 		Footer: &discordgo.MessageEmbedFooter{
-			IconURL: icon,
+			IconURL: env.Icon,
 			Text:    status,
 		},
 	}
